@@ -3,6 +3,8 @@ import db.PedidosVendaDB;
 import db.ProdutosDB;
 import db.UsuariosDB;
 import models.*;
+import validadores.ValidadorPedidoVenda;
+
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +18,7 @@ public class Main {
     static EstoquesDB estoquesDB = new EstoquesDB();
     static PedidosVendaDB pedidosVendaDB = new PedidosVendaDB();
     public static void main(String[] args) throws Exception {
-        System.out.println("--- PEDIDO DE VENDAS ---");
+        System.out.println("------------ CADASTRO DE PRODUTOS-----------");
 
         int option;
 
@@ -182,7 +184,15 @@ public class Main {
                 int quantidade = scanner.nextInt();
 
                 PedidoVenda novoPedido = new PedidoVenda(cliente, estoque, quantidade);
-                pedidosVendaDB.addNovoPedidoVenda(novoPedido);
+
+                ValidadorPedidoVenda validadorPedidoVenda = new ValidadorPedidoVenda(novoPedido);
+
+                if (validadorPedidoVenda.ehValido()){
+                    pedidosVendaDB.addNovoPedidoVenda(novoPedido);
+                } else {
+                    System.out.println(validadorPedidoVenda.getErros());
+                }
+
             }
             break;
 
@@ -204,4 +214,3 @@ public class Main {
         }
 
     }
-
